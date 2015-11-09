@@ -1,0 +1,307 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>自制梯子，VPS 搭建 ShadwSocks 服务全攻略 | YoungSun&#39;s Blog</title>
+  <meta name="author" content="Young Sun">
+  
+  <meta name="description" content="Across the Great Wall we can reach every corner in the world.">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="自制梯子，VPS 搭建 ShadwSocks 服务全攻略"/>
+  <meta property="og:site_name" content="YoungSun&#39;s Blog"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.ico" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-69870867-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">YoungSun&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> 自制梯子，VPS 搭建 ShadwSocks 服务全攻略</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+	
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>Across the Great Wall we can reach every corner in the world.</p>
+			
+		</div> <!-- alert -->
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <h2 id="前言">前言</h2>
+<p><code>Shadowsocks</code>是一个轻量级<code>socks5</code>代理,通过客户端以指定的密码、加密方式和端口连接服务器，成功连接到服务器后，客户端在用户的电脑上构建一个本地<code>socks5</code>代理。使用时将流量分到本地<code>socks5</code>代理，客户端将自动加密并转发流量到服务器，服务器以同样的加密方式将流量回传给客户端，以此实现代理上网。与<code>VPN</code>相比有以下优点。</p>
+<ul>
+<li>快速（异步I/O和事件驱动程序）</li>
+<li>安全（所有的流量都经过加密算法加密，支持自定义算法）</li>
+</ul>
+<a id="more"></a>
+<ul>
+<li>支持移动客户端（专为移动设备和无线网络优化）</li>
+<li>跨平台（可运行于包括PC，Mac，手机（Android和iOS）和路由器（OpenWrt）在内的多种平台上）</li>
+<li>开源</li>
+<li>易于维护</li>
+</ul>
+<h2 id="1_服务器端配置">1 服务器端配置</h2>
+<p>建议选择 <code>Ubuntu 14.04 LTS</code>作为服务器以便使用 <code>TCP Fast Open</code>。除非有明确理由，不建议用对新手不友好的 <code>CentOS</code>。</p>
+<p>为了更好的性能，<code>VPS</code>尽量选择 <code>XEN</code> 或 <code>KVM</code>，不要使用 <code>OpenVZ</code>。</p>
+<h3 id="1-1_安装">1.1 安装</h3>
+<p>运行以下命令</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sudo apt-<span class="built_in">get</span> install <span class="keyword">python</span>-pip</div><div class="line">sudo pip install shadowsocks</div><div class="line">#安装 M2Crypto 提高运行速度</div><div class="line">apt-<span class="built_in">get</span> install <span class="keyword">python</span>-m2crypto</div></pre></td></tr></table></figure>
+
+<h3 id="1-2_运行">1.2 运行</h3>
+<p>输入以下命令后台运行</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">sudo</span> ssserver -p <span class="number">443</span> -k password -m rc4-md5 --fast-open --user username <span class="operator">-d</span> start</div></pre></td></tr></table></figure>
+
+<ul>
+<li><code>p</code> 参数指定服务端口</li>
+<li><code>k</code> 指定服务密码</li>
+<li><code>m</code> 加密方式 ，默认为  <code>aes-256-cfb</code>更多加密方式 <a href="https://github.com/shadowsocks/shadowsocks/wiki/Encryption" target="_blank" rel="external">点击这里</a></li>
+<li><code>--fast-open</code> 快速模式（内核3.7以上版本，<code>ubuntu</code>中需要14.04以上版本）</li>
+<li><code>--user</code> 运行程序的用户名</li>
+<li><code>d</code>后台驻留方式</li>
+<li><code>start</code> 开始运行</li>
+</ul>
+<h3 id="1-3添加开机自启动">1.3添加开机自启动</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"> <span class="built_in">sudo</span> vi /etc/rc.local</div><div class="line"><span class="comment">#按i输入以下命令</span></div><div class="line"><span class="built_in">sudo</span> ssserver -p <span class="number">443</span> -k password -m rc4-md5 --fast-open --user username <span class="operator">-d</span> start</div><div class="line"><span class="comment">#:wq保存退出</span></div></pre></td></tr></table></figure>
+
+<p>  运行以下命令测试是否运行正常</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">ps</span> -ef | <span class="keyword">grep</span> ssserver | <span class="keyword">grep</span> -<span class="keyword">v</span> <span class="keyword">ps</span> | <span class="keyword">grep</span> -<span class="keyword">v</span> <span class="keyword">grep</span></div></pre></td></tr></table></figure>
+
+<p>  ​</p>
+<h2 id="2_客户端配置">2 客户端配置</h2>
+<p>下载 <a href="https://github.com/shadowsocks/shadowsocks-iOS/releases" target="_blank" rel="external">Shadowsocks for OSX</a> </p>
+<p>安装后直接运行</p>
+<p><img src="http://7xim0l.com1.z0.glb.clouddn.com/access-gfw/mac.png" alt="mac"></p>
+<p>然后在<code>服务器设置</code>中依次填入我们的</p>
+<ul>
+<li>服务器 ip</li>
+<li>端口</li>
+<li>加密方式</li>
+<li>密码</li>
+</ul>
+<hr>
+<p>Enjoy it !</p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2015/10/27/OC_introduce/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一页</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2015/08/29/linux_setup/" class="alignright next">下一页<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div id="disqus_thread">
+     <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  	 </div>
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	8月 31 2015 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/tutorial/">tutorial<span>2</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/ShadwSocks/">ShadwSocks<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2015 Young Sun
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'sunyang';
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

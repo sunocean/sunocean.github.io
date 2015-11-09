@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title><![CDATA[YoungSun's Blog]]></title>
+  <subtitle><![CDATA[和无聊得世界死磕！]]></subtitle>
+  <link href="/atom.xml" rel="self"/>
+  <link href="http://sunyang.cc/"/>
+  <updated>2015-11-09T17:28:34.148Z</updated>
+  <id>http://sunyang.cc/</id>
+  
+  <author>
+    <name><![CDATA[Young Sun]]></name>
+    <email><![CDATA[mailbox@sunyang.cc]]></email>
+  </author>
+  
+  <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[OC 面向对象概览]]></title>
+    <link href="http://sunyang.cc/2015/11/01/OC_overview/"/>
+    <id>http://sunyang.cc/2015/11/01/OC_overview/</id>
+    <published>2015-11-01T13:30:48.000Z</published>
+    <updated>2015-11-09T16:36:31.000Z</updated>
+    <content type="html"><![CDATA[<p>​      iOS 和 OSX 程序是由一系列对象 (<code>Object</code>) 构成的网络组成的.  对象是类 (<code>Class</code> ) 的实例 .类是对象的模板或者说图纸( Blue print). 类通常由我们自定义或者由系统(Cocoa 和 Cocoa Touch )或者第三方类库提供.  我们在自定义类的时候通常会定义好公共接口(<code>public interface</code>) . 公共接口包含一些用来封装(<code>encapsulate</code>)内部数据的属性( <code>property</code>) 和相应的存取方法(<code>Setter and Getter</code>) 列表以及其他一些消息(<code>Message</code>)响应方法列表. 然后我们会在同一个文件或者对应的<code>.m</code> 文件中实现这些方法. 参考下面这段代码. </p>
+  <a id="more"></a>
+<h2 id="类">类</h2>
+<h3 id="类的声明">类的声明</h3>
+<p><code>Class header (MyClassName.h)</code></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor">#import <span class="title">"AnyHeaderFile.h"</span></span></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">MyClassName</span> : <span class="title">SuperClassName</span></span></div><div class="line"><span class="comment">// define public properties</span></div><div class="line"><span class="comment">// define public methods</span></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+
+<h3 id="类的实现">类的实现</h3>
+<p><code>Class implementation (MyClassName.m)</code></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor">#import <span class="title">"MyClassName.h"</span></span></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">MyClassName</span> ()//类的扩展 (<span class="title">extension</span>)</span></div><div class="line"><span class="comment">// define private properties</span></div><div class="line"><span class="comment">// define private methods</span></div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">MyClassName</span> </span>{</div><div class="line"><span class="comment">// define private instance variables</span></div><div class="line">}</div><div class="line"><span class="comment">// implement methods</span></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+
+<h4 id="属性_(property)">属性 (<code>property</code>)</h4>
+<p> 定义属性</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">@property</span> (optional_attribute1, optional_attribute2, ...) type myPropertyName;</div></pre></td></tr></table></figure>
+
+<div class="alert alert-warning"><i class="fa fa-bell"></i>  <p> <code>@property</code> 关键字会让 Xcode 在编译时候自动生成私有的变量实例(private instance variable) ,和相应的存取方法(getter setter) </p>
+<pre><code class="objectivec"><span class="comment">// Automatically defines a private instance variable</span>
+type _myPropertyName;
+<span class="comment">// Automatically creates a getter and setter</span>
+- (type)myPropertyName;
+- (<span class="keyword">void</span>)setMyPropertyName:(type)name;
+</code></pre>
+<p>一般命名规则自动变量名 为属性名加 -前缀, getter 方法名为属性名, setter 方法为 set 前缀加属性名. 当然也可以通过特性开关来修改变量名,我们长把返回布尔量的 getter 方法定义为下面这种形式 </p>
+<pre><code class="objectivec"><span class="keyword">@property</span>  (getter = isEqualTOSomething) type myPeoperrty;
+<span class="comment">//生成的 getter 方法变成了下面这种形式</span>
+- (type) isEqualTOSomething;
+</code></pre>
+</div>
+
+<div class="alert alert-success"><i class="fa fa-lightbulb-o"></i>  <p>tips:</p>
+<p>使用  _myPropertyName 可以直接访问变量(一般用于懒加载)</p>
+<p>使用 self.myPropertyName 通过 getter 和 setter 方法访问变量.</p>
+</div>
+
+<h4 id="方法_(Methods)">方法 (Methods)</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">Defining methods</div><div class="line">- (<span class="class"><span class="keyword">type</span>)<span class="title">doIt</span>;</span></div><div class="line">- (<span class="class"><span class="keyword">type</span>)<span class="title">doItWithA</span>:</span>(<span class="class"><span class="keyword">type</span>)<span class="title">a</span>;</span></div><div class="line">- (<span class="class"><span class="keyword">type</span>)<span class="title">doItWithA</span>:</span>(<span class="class"><span class="keyword">type</span>)<span class="title">a</span> <span class="title">andB</span>:</span>(<span class="class"><span class="keyword">type</span>)<span class="title">b</span>;</span></div><div class="line">Implementing methods</div><div class="line">- (<span class="class"><span class="keyword">type</span>)<span class="title">doIt</span> {</span></div><div class="line">    <span class="comment">// do something</span></div><div class="line">    <span class="keyword">return</span> ReturnValue;</div><div class="line">}</div><div class="line"></div><div class="line">- (<span class="class"><span class="keyword">type</span>)<span class="title">doItWithA</span>:</span>(<span class="class"><span class="keyword">type</span>)<span class="title">a</span> {</span></div><div class="line">    <span class="comment">// do something with a</span></div><div class="line">    <span class="keyword">return</span> ReturnValue;</div><div class="line">}</div><div class="line"></div><div class="line">- (<span class="class"><span class="keyword">type</span>)<span class="title">doItWithA</span>:</span>(<span class="class"><span class="keyword">type</span>)<span class="title">a</span> <span class="title">andB</span>:</span>(<span class="class"><span class="keyword">type</span>)<span class="title">b</span> {</span></div><div class="line">    <span class="comment">// do something with a and b</span></div><div class="line">    <span class="keyword">return</span> ReturnValue;</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<h4 id="常量(Constants)">常量(Constants)</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">File specific constants</div><div class="line">  <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">double</span> name = <span class="keyword">value</span>;</div><div class="line">  <span class="keyword">static</span> NSString * <span class="keyword">const</span> name = <span class="keyword">value</span>;</div><div class="line">External constants</div><div class="line">  <span class="comment">// .h</span></div><div class="line">  <span class="keyword">extern</span> <span class="keyword">const</span> <span class="keyword">double</span> name;</div><div class="line">  <span class="comment">// .m</span></div><div class="line">  <span class="keyword">const</span> <span class="keyword">double</span> name = <span class="keyword">value</span>;</div><div class="line"></div><div class="line">  <span class="comment">// .h</span></div><div class="line">  <span class="keyword">extern</span> NSString * <span class="keyword">const</span> name;</div><div class="line">  <span class="comment">// .m</span></div><div class="line">  NSString * <span class="keyword">const</span> name = <span class="keyword">value</span>;</div></pre></td></tr></table></figure>
+
+<h3 id="对象">对象</h3>
+<h4 id="创建对象">创建对象</h4>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">Creating objects</div><div class="line">ClassName *<span class="variable">myObject =</span> [[ClassName alloc] init];</div><div class="line">Using properties</div><div class="line">// setting value</div><div class="line">[myObject setMyPropertyName:a]; // <span class="constant">or</span></div><div class="line">myObject.<span class="variable">myPropertyName =</span> a;</div><div class="line"></div><div class="line">// getting value</div><div class="line"><span class="variable">a =</span> [myObject myPropertyName]; // <span class="constant">or</span></div><div class="line"><span class="variable">a =</span> myObject.myPropertyName;</div><div class="line">Calling methods</div><div class="line">[myObject doIt];</div><div class="line">[myObject doItWithA:a];</div><div class="line">[myObject doItWithA:a andB:b];</div></pre></td></tr></table></figure>
+
+<h3 id="完整示例">完整示例</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">Custom initializer</div><div class="line">- (<span class="keyword">id</span>)initWithParam:(type)param {</div><div class="line">    <span class="keyword">if</span> ((<span class="keyword">self</span> = [<span class="keyword">super</span> init])) {</div><div class="line">        _myPropertyName = param;</div><div class="line">    }</div><div class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</div><div class="line">}</div><div class="line"><span class="built_in">NSString</span></div><div class="line"><span class="built_in">NSString</span> *personOne = <span class="string">@"Ray"</span>;</div><div class="line"><span class="built_in">NSString</span> *personTwo = <span class="string">@"Shawn"</span>;</div><div class="line"><span class="built_in">NSString</span> *combinedString = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%@: Hello, %@!"</span>, personOne, personTwo];</div><div class="line"><span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, combinedString);</div><div class="line"><span class="built_in">NSString</span> *tipString = <span class="string">@"24.99"</span>;</div><div class="line"><span class="keyword">float</span> tipFloat = [tipString floatValue];</div><div class="line"><span class="built_in">NSArray</span></div><div class="line"><span class="built_in">NSMutableArray</span> *array = [@[person1, person2] mutableCopy];</div><div class="line">[array addObject:<span class="string">@"Waldo"</span>];</div><div class="line"><span class="keyword">for</span> (<span class="built_in">NSString</span> *person <span class="keyword">in</span> array) {</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"Person: %@"</span>, person);</div><div class="line">}</div><div class="line"><span class="built_in">NSString</span> *waldo = array[<span class="number">2</span>];</div></pre></td></tr></table></figure>
+
+]]></content>
+    <summary type="html">
+    <![CDATA[OC 是一种用来写 iOS 或者 OSX 程序的初级语言,它是 C 语言的超集, 继承了 C 语言所有的语法比如基本类型和流控等等. OC 在 C 语言基础上增加定义类和方法的语法, 并为对象许多运行时特性(比如动态类型, 动态绑定, 懒加载等等) 提供了语言级的支持.]]>
+    
+    </summary>
+    
+      <category term="OC" scheme="http://sunyang.cc/tags/OC/"/>
+    
+      <category term="wiki" scheme="http://sunyang.cc/categories/wiki/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[OC 入门]]></title>
+    <link href="http://sunyang.cc/2015/10/27/OC_introduce/"/>
+    <id>http://sunyang.cc/2015/10/27/OC_introduce/</id>
+    <published>2015-10-27T04:51:15.000Z</published>
+    <updated>2015-11-04T07:43:34.000Z</updated>
+    <content type="html"><![CDATA[<h3 id="Hello_World">Hello World</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor">#import <span class="title">&lt;Foundation/Foundation.h&gt;</span></span></div><div class="line"><span class="keyword">int</span> main (<span class="keyword">int</span> argc, contst <span class="keyword">char</span> *argv)</div><div class="line">{</div><div class="line">    <span class="built_in">NSLog</span> (<span class="string">@"Hello World!"</span>);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">} <span class="comment">// main</span></div></pre></td></tr></table></figure>
+
+<a id="more"></a>
+<h4 id="#import">#import</h4>
+<p><code>import</code> 是 OC 中引入的新预编译命令,用来代替 C 语言中 <code>include</code> ,其优点是无论该头文件被引用多少次, 编译的时候只包含一次. (<code>include</code>只是简单复制不做这个检查. )</p>
+<div class="alert alert-success"><i class="fa fa-lightbulb-o"></i>  <p>  在 C 语言中，程序员通常使用基于 #ifdef 命令的方案来避免一个文件包含另一个文件，而后者又包含第一个文件的情况。</p>
+<p>而在 Objective-C 中，程序员使用 #import 来实现这个功能。 </p>
+</div>
+
+
+
+<h4 id="Fundation_框架">Fundation 框架</h4>
+<p>Foundation 框架处理的是用户界面之下的层（layer）中的特性，例如数据结构和通信机制。IOS开发中几乎所有程序都是以 Foundation 框架为基础。如果你想知道 Foundation 框架包含哪些头文件，可以查看其 Header 目录（/System/Library/Frameworks/Foundation.framework/Headers/）。</p>
+<h4 id="NSLog()_和_@“字符串”">NSLog() 和 @“字符串”</h4>
+<p>NSLog 作用类似于 C 语言的<code>printf()</code> ，调用方法也很类似。但我们建议用 <code>NSLog()</code> ，因为它添加了特性，例如时间戳、日期戳和自动附加换行符（<code>\n</code>）等。</p>
+<p><code>@</code> 符号是 Objective-C 在标准 C 语言基础上添加的特性之一。双引号中的字符串前有一个 @ 符号，这表示引用的字符串应该作为 Cocoa 的 NSString 元素来处理。NSString 元素封装了许多特性，Cocoa 在需要字符串时可以随时使用它们。下面是一些 NSString 的功能。</p>
+<ul>
+<li>告知其长度；</li>
+</ul>
+<ul>
+<li>将自身与其他字符串比较；</li>
+</ul>
+<ul>
+<li>将自身转换为整型值或浮点值。</li>
+</ul>
+<h3 id="BOOL_与_boolean">BOOL 与 boolean</h3>
+<p>在 C99 发布前, C 语言中没有严格的 <code>Boolean</code>类型, 程序员通常 用 <code>零</code>和 <code>非零</code>  表示<code>flase</code>和<code>true</code>. 这样虽然增强了 程序实现的灵活性 , 但同时降低了可读性 和 可维护性 . 造成一些难以理解的 Bug . 为了 改善这个问题 OC 引入的新的书记类型 <code>BOOL</code>  来表示开关量.  通过显示赋值来降低<code>Magic Bug</code>的发生. </p>
+<p>其实 OC 并没有完全解决这个问题 ,考虑下面的代码 </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor">#import &lt;Foundation/Foundation.h&gt;</span></div><div class="line"></div><div class="line"><span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[]) {</div><div class="line"></div><div class="line">	BOOL b =<span class="number">42</span>;</div><div class="line">	<span class="keyword">if</span> (b) {</div><div class="line">		printf(<span class="string">"b is YES\n"</span>);</div><div class="line">	}</div><div class="line">	<span class="keyword">if</span> (b != YES) {</div><div class="line">		printf(<span class="string">"b isn't YES\n"</span>);</div><div class="line">	}</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">}</div><div class="line">输出为 </div><div class="line">b <span class="keyword">is</span> YES</div><div class="line">b isn<span class="string">'t YES</span></div></pre></td></tr></table></figure>
+
+<p>BOOL  类型可以被赋值为非 <code>YES</code> 和 <code>NO</code> 的值. 这是什么情况?  xcode中 按下 <code>⌘ + ⌃ + J</code>  跳入 <code>BOOL</code> 定义  :</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">signed</span> <span class="keyword">char</span> <span class="built_in">BOOL</span>;</div></pre></td></tr></table></figure>
+
+<p>同理  <code>YES</code> 和 <code>NO</code> 的定义如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor">#<span class="keyword">define</span> YES ((BOOL)1)</span></div><div class="line"><span class="preprocessor">#<span class="keyword">define</span> NO  ((BOOL)0)</span></div></pre></td></tr></table></figure>
+
+<p>可以看到 原来<code>BOOL</code> 是 <code>signed char</code> 的马甲. 在编写代码时, 一定要注意检查, 不要给 BOOL 类型赋予 非 <code>YES</code> 和 <code>NO</code> 类型的值.</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[OC 是 C 语言的超集完全兼容 C 语言的所有语法, 本文主要关注 OC 中新添加的一些属性]]>
+    
+    </summary>
+    
+      <category term="OC" scheme="http://sunyang.cc/tags/OC/"/>
+    
+      <category term="wiki" scheme="http://sunyang.cc/categories/wiki/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[自制梯子，VPS 搭建 ShadwSocks 服务全攻略]]></title>
+    <link href="http://sunyang.cc/2015/08/31/access-gfw/"/>
+    <id>http://sunyang.cc/2015/08/31/access-gfw/</id>
+    <published>2015-08-31T05:18:22.000Z</published>
+    <updated>2015-11-04T14:42:00.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="前言">前言</h2>
+<p><code>Shadowsocks</code>是一个轻量级<code>socks5</code>代理,通过客户端以指定的密码、加密方式和端口连接服务器，成功连接到服务器后，客户端在用户的电脑上构建一个本地<code>socks5</code>代理。使用时将流量分到本地<code>socks5</code>代理，客户端将自动加密并转发流量到服务器，服务器以同样的加密方式将流量回传给客户端，以此实现代理上网。与<code>VPN</code>相比有以下优点。</p>
+<ul>
+<li>快速（异步I/O和事件驱动程序）</li>
+<li>安全（所有的流量都经过加密算法加密，支持自定义算法）</li>
+</ul>
+<a id="more"></a>
+<ul>
+<li>支持移动客户端（专为移动设备和无线网络优化）</li>
+<li>跨平台（可运行于包括PC，Mac，手机（Android和iOS）和路由器（OpenWrt）在内的多种平台上）</li>
+<li>开源</li>
+<li>易于维护</li>
+</ul>
+<h2 id="1_服务器端配置">1 服务器端配置</h2>
+<p>建议选择 <code>Ubuntu 14.04 LTS</code>作为服务器以便使用 <code>TCP Fast Open</code>。除非有明确理由，不建议用对新手不友好的 <code>CentOS</code>。</p>
+<p>为了更好的性能，<code>VPS</code>尽量选择 <code>XEN</code> 或 <code>KVM</code>，不要使用 <code>OpenVZ</code>。</p>
+<h3 id="1-1_安装">1.1 安装</h3>
+<p>运行以下命令</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sudo apt-<span class="built_in">get</span> install <span class="keyword">python</span>-pip</div><div class="line">sudo pip install shadowsocks</div><div class="line">#安装 M2Crypto 提高运行速度</div><div class="line">apt-<span class="built_in">get</span> install <span class="keyword">python</span>-m2crypto</div></pre></td></tr></table></figure>
+
+<h3 id="1-2_运行">1.2 运行</h3>
+<p>输入以下命令后台运行</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">sudo</span> ssserver -p <span class="number">443</span> -k password -m rc4-md5 --fast-open --user username <span class="operator">-d</span> start</div></pre></td></tr></table></figure>
+
+<ul>
+<li><code>p</code> 参数指定服务端口</li>
+<li><code>k</code> 指定服务密码</li>
+<li><code>m</code> 加密方式 ，默认为  <code>aes-256-cfb</code>更多加密方式 <a href="https://github.com/shadowsocks/shadowsocks/wiki/Encryption" target="_blank" rel="external">点击这里</a></li>
+<li><code>--fast-open</code> 快速模式（内核3.7以上版本，<code>ubuntu</code>中需要14.04以上版本）</li>
+<li><code>--user</code> 运行程序的用户名</li>
+<li><code>d</code>后台驻留方式</li>
+<li><code>start</code> 开始运行</li>
+</ul>
+<h3 id="1-3添加开机自启动">1.3添加开机自启动</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"> <span class="built_in">sudo</span> vi /etc/rc.local</div><div class="line"><span class="comment">#按i输入以下命令</span></div><div class="line"><span class="built_in">sudo</span> ssserver -p <span class="number">443</span> -k password -m rc4-md5 --fast-open --user username <span class="operator">-d</span> start</div><div class="line"><span class="comment">#:wq保存退出</span></div></pre></td></tr></table></figure>
+
+<p>  运行以下命令测试是否运行正常</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">ps</span> -ef | <span class="keyword">grep</span> ssserver | <span class="keyword">grep</span> -<span class="keyword">v</span> <span class="keyword">ps</span> | <span class="keyword">grep</span> -<span class="keyword">v</span> <span class="keyword">grep</span></div></pre></td></tr></table></figure>
+
+<p>  ​</p>
+<h2 id="2_客户端配置">2 客户端配置</h2>
+<p>下载 <a href="https://github.com/shadowsocks/shadowsocks-iOS/releases" target="_blank" rel="external">Shadowsocks for OSX</a> </p>
+<p>安装后直接运行</p>
+<p><img src="http://7xim0l.com1.z0.glb.clouddn.com/access-gfw/mac.png" alt="mac"></p>
+<p>然后在<code>服务器设置</code>中依次填入我们的</p>
+<ul>
+<li>服务器 ip</li>
+<li>端口</li>
+<li>加密方式</li>
+<li>密码</li>
+</ul>
+<hr>
+<p>Enjoy it !</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[Across the Great Wall we can reach every corner in the world.]]>
+    
+    </summary>
+    
+      <category term="ShadwSocks" scheme="http://sunyang.cc/tags/ShadwSocks/"/>
+    
+      <category term="tutorial" scheme="http://sunyang.cc/categories/tutorial/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[VPS 开荒指南]]></title>
+    <link href="http://sunyang.cc/2015/08/29/linux_setup/"/>
+    <id>http://sunyang.cc/2015/08/29/linux_setup/</id>
+    <published>2015-08-29T14:52:36.000Z</published>
+    <updated>2015-11-01T09:55:49.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="1_系统环境">1 系统环境</h2>
+<p>从哪个发行版入手这里我们不多做讨论，这里我们选择<code>Ubuntu 14.04 LTS</code>,优点是软件比较新，用的人多，任何问题<code>google</code>一下马上就有答案。本教程客户机部分适用于 <code>Linux</code> 和<code>Mac</code>。</p>
+<h3 id="1-1_创建用户">1.1 创建用户</h3>
+<p>首先通过 VPS 的web 管理工具 root 登录，然后创建一个用户组 <code>admin</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor">#更新下软件包</span></div><div class="line">sudo apt-<span class="keyword">get</span> update</div><div class="line">sudo apt-<span class="keyword">get</span> upgrade</div><div class="line"><span class="preprocessor">#添加用户</span></div><div class="line">addgroup admin</div></pre></td></tr></table></figure>
+
+<a id="more"></a>
+<p>然后，添加一个新用户 <code>username</code></p>
+<figure class="highlight dash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">useradd <span class="operator">-d</span> /home/username <span class="operator">-s</span> /bin/bash -m username</div></pre></td></tr></table></figure>
+
+<p>上面命令中，参数<code>d</code>指定用户的主目录，参数<code>s</code>指定用户的<code>shell</code>，参数<code>m</code>表示如果该目录不存在，则创建该目录。</p>
+<p>接着，设置新用户的密码。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="title">passwd</span> username</div></pre></td></tr></table></figure>
+
+<a id="more"></a>
+<p>将新用户（username）添加到用户组（admin）。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">usermod <span class="operator">-a</span> -G admin username</div></pre></td></tr></table></figure>
+
+<p>接着，为新用户设定sudo权限。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">visudo</div></pre></td></tr></table></figure>
+
+<p><code>visudo</code>命令会打开<code>sudo</code>设置文件<code>/etc/sudoers</code>，找到下面这一行。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root       <span class="keyword">ALL</span>=(<span class="keyword">ALL</span>:<span class="keyword">ALL</span>) <span class="keyword">ALL</span></div></pre></td></tr></table></figure>
+
+<p>在这一行的下面，再添加一行。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">root        <span class="keyword">ALL</span>=(<span class="keyword">ALL</span>:<span class="keyword">ALL</span>) <span class="keyword">ALL</span></div><div class="line">username    <span class="keyword">ALL</span>=(<span class="keyword">ALL</span>) NOPASSWD: <span class="keyword">ALL</span></div></pre></td></tr></table></figure>
+
+<p>上面的NOPASSWD表示，切换sudo的时候，不需要输入密码，我喜欢这样比较省事。如果出于安全考虑，也可以强制要求输入密码。</p>
+<p>然后，先退出root用户的登录，再用新用户的身份登录，检查到这一步为止，是否一切正常。</p>
+<h2 id="2_SSH">2 SSH</h2>
+<p><a href="http://baike.baidu.com/subview/16184/5909252.htm" target="_blank" rel="external">SSH</a>有两种验证方式，出于安全考虑我们选择基于密钥的验证方式。思路就是在本地生成一对 <code>RSA</code>加密的密钥，把公钥上传给服务器用于认证访问的安全性，这样的好处是可以实现多用户不同权限访问。</p>
+<h3 id="2-1_检查客户端（本地）密钥设置">2.1 检查客户端（本地）密钥设置</h3>
+<p>先检查本地<code>.ssh</code>文件夹防止新生成的密钥覆盖原先密钥造成密钥丢失。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/.ssh</div></pre></td></tr></table></figure>
+
+<p>如果出现如下提示，则直接跳到第三步</p>
+<blockquote>
+<p>No such file or directory</p>
+</blockquote>
+<h3 id="2-2_备份和移除原来的ssh_key设置">2.2 备份和移除原来的ssh key设置</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">ls</span> </div><div class="line">config  id_rsa  id_rsa.pub  known_hosts//可能有所不同</div><div class="line"><span class="built_in">mkdir</span> key_backup</div><div class="line"><span class="keyword">cp</span> id_rsa* key_backup</div><div class="line">rm id_rsa*</div></pre></td></tr></table></figure>
+
+<h3 id="2-3_生成新的SSH_Key：">2.3 生成新的SSH Key：</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ssh<span class="attribute">-keygen</span> <span class="attribute">-t</span> rsa <span class="attribute">-C</span> <span class="string">"邮件地址@youremail.com"</span></div><div class="line">Generating <span class="keyword">public</span>/<span class="keyword">private</span> rsa key <span class="built_in">pair</span><span class="built_in">.</span></div><div class="line">Enter file <span class="keyword">in</span> which <span class="keyword">to</span> save the key (/Users/your_user_directory<span class="subst">/</span><span class="built_in">.</span>ssh/id_rsa):<span class="comment">//这里回车</span></div></pre></td></tr></table></figure>
+
+<p>然后系统会要求你输入加密串 <a href="https://help.github.com/articles/working-with-ssh-key-passphrases/" target="_blank" rel="external">Passphrase</a> .</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="constant">Enter</span> passphrase (empty <span class="keyword">for</span> no passphrase)<span class="symbol">:&lt;</span>输入加密串&gt;<span class="regexp">//</span>也可以直接回车</div><div class="line"><span class="constant">Enter</span> same passphrase <span class="symbol">again:</span>&lt;再次输入加密串&gt;<span class="regexp">//</span>同上</div></pre></td></tr></table></figure>
+
+<p>看到下图就说明你成功了:</p>
+<p><img src="http://7xim0l.com1.z0.glb.clouddn.com/ssh-key-set.png" alt="你会看到"></p>
+<h3 id="2-4_上传公钥">2.4 上传公钥</h3>
+<p>现在，我们已经在 <code>~/.ssh/</code>目录下创建了两个文件：<code>id_rsa（私钥）</code>，<code>id_rsa.pub（公钥）</code>。公钥放置在我们管理的服务器上，私钥是我们连接服务器的关键，如果有必要，需要在其他地方做一个备份，如果开发机器损坏或丢失，而服务器又无法连接的话，会造成巨大的损失和时间浪费。当然，一般云服务器会提供应急的 web 管理界面，如果出现刚才讲述的情形，我们重新创建一份私钥和公钥，并且替换服务器上的公钥即可。</p>
+<p>现在，我们在服务器上创建一个部署项目的账号，<code>sunyang</code> :</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">sudo</span> useradd sunyang</div><div class="line"><span class="built_in">sudo</span> passwd  sunyang</div><div class="line">Enter  new UNIX password:</div><div class="line">Retype new UNIX password:</div><div class="line">su sunyang</div></pre></td></tr></table></figure>
+
+<p>现在，我们把公钥传递到服务器上,在本机新开一个终端运行以下命令：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="title">cat</span> ~/.ssh/id_rsa.pub | ssh USER<span class="variable">@HOST</span> <span class="string">"mkdir -p ~/.ssh && cat &gt;&gt; ~/.ssh/authorized_keys"</span></div></pre></td></tr></table></figure>
+
+<p><code>authorized_keys</code> 是公钥在服务器上的新名字，这个名字可以改掉。</p>
+<p>为了避免每次登陆服务器都输入密码（也是防止密码被暴力破解），我们配置下服务器的 <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/sshd.8?query=sshd&amp;sec=8" target="_blank" rel="external">sshd</a>。这个文件通常在 <code>/etc/ssh/sshd_config：</code></p>
+<p>下面这几项请确保和本文一致。(如果前面有#则去掉)</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="title">AuthorizedKeysFile</span>     .ssh/authorized_keys [<span class="number">1</span>]  </div><div class="line">PermitEmptyPasswords                     <span class="built_in">no</span> [<span class="number">2</span>] </div><div class="line">PermitRootLogin                          <span class="built_in">no</span> [<span class="number">3</span>] </div><div class="line">PasswordAuthentication                   <span class="built_in">no</span> [<span class="number">4</span>]</div></pre></td></tr></table></figure>
+
+<ul>
+<li>[1] 这是一种适合多用户的配置，比如，多个开发者登陆服务器，<code>sshd</code> 会校验每个登陆账户下的 <code>.ssh/authorized_keys</code>。</li>
+<li>[2] 禁止空密码访问，这是默认的</li>
+<li>[3] 禁止 <code>root</code> 访问，当我们开通服务器时，这个选项默认是 <code>yes</code>，这样我们可以使用 <code>root</code> 登陆。当设置完 <code>ssh</code> 后，建议第一时间关闭它。</li>
+<li>[4] 不使用密码校验，这是 ssh 会自动读取、开发机器上的私钥校验，如果成功匹配，则自动登陆服务器。</li>
+</ul>
+<p>设置完后，重启 <code>sshd</code> 服务：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">sudo</span> service ssh restart</div></pre></td></tr></table></figure>
+
+<p>不要立刻退出当前的 <code>shell</code>，新开一个终端窗口进行登陆测试。</p>
+<h3 id="2-5_加强型（可选）">2.5 加强型（可选）</h3>
+<p>在配置文件中，将SSH的默认端口22改掉，可以改成从1025到65536之间的任意一个整数（这里假定为9527）。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">Port</span> <span class="number">9527</span></div></pre></td></tr></table></figure>
+
+<p>接着，在配置文件的末尾，指定允许登陆的用户。</p>
+<figure class="highlight dash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="title">AllowUser</span> sunyang username1 username2 <span class="comment">#不同用户用空格隔开</span></div></pre></td></tr></table></figure>
+
+<p>设置完后，重启 <code>sshd</code> 服务：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">sudo</span> service ssh restart</div></pre></td></tr></table></figure>
+
+<p>不要立刻退出当前的 <code>shell</code>，新开一个终端窗口进行登陆测试。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"> ssh sunyang@hostip -p <span class="number">9527</span></div><div class="line"><span class="keyword">...</span></div></pre></td></tr></table></figure>
+
+<p>在客户机（本机）中修改<code>.ssh</code>中的<code>config</code>（如果没有则创建）</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Host sunyang-VM</div><div class="line">HostName <span class="literal">ip</span></div><div class="line">User sunyang</div><div class="line">Port <span class="number">9527</span></div></pre></td></tr></table></figure>
+
+<p>新开一个终端测试</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="title">ssh</span> sunyang-VM</div></pre></td></tr></table></figure>
+
+<h2 id="3_ZSH">3 ZSH</h2>
+<h3 id="3-1_安装_ZSH">3.1 安装 ZSH</h3>
+<p>运行以下命令</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">sudo apt-<span class="built_in">get</span> install zsh</div><div class="line">##安装oh-my-zsh插件</div><div class="line"><span class="keyword">cd</span> ~/.</div><div class="line">##自动安装脚本</div><div class="line">wget --<span class="keyword">no</span>-check-certificate http<span class="variable">s:</span>//github.<span class="keyword">com</span>/robbyrussell/oh-my-zsh/raw/master/tools/install.<span class="keyword">sh</span> -O - | <span class="keyword">sh</span></div></pre></td></tr></table></figure>
+
+<p>耐心等一会 终端就变成彩色的了</p>
+<p><img src="http://7xim0l.com1.z0.glb.clouddn.com/oh-my-zsh.jpeg" alt="zsh"></p>
+<h2 id="设置当前用户使用_zsh">设置当前用户使用 zsh</h2>
+<p> chsh -s /bin/zsh</p>
+<h3 id="3-2_配置_ZSH">3.2 配置 ZSH</h3>
+<p>zsh 的配置主要集中在用户当前目录的<code>.zshrc</code>里，用 <code>vim</code> 或你喜欢的其他编辑器打开<code>.zshrc</code>，在最下面会发现这么一行字：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor"># Customize to your needs…</span></div></pre></td></tr></table></figure>
+
+<p>可以在此处定义自己的环境变量和别名，当然，<code>oh my zsh</code> 在安装时已经自动读取当前的环境变量并进行了设置，你可以继续追加其他环境变量。</p>
+<p>接下来进行别名的设置，我自己的部分配置如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">alias</span> <span class="title">cls</span>=<span class="comment">'clear'</span></div><div class="line"><span class="keyword">alias</span> <span class="title">ll</span>=<span class="comment">'ls -l'</span></div><div class="line"><span class="keyword">alias</span> <span class="title">la</span>=<span class="comment">'ls -a'</span></div><div class="line"><span class="keyword">alias</span> <span class="title">vi</span>=<span class="comment">'vim'</span></div><div class="line"><span class="keyword">alias</span> <span class="title">javac</span>=<span class="string">"javac -J-Dfile.encoding=utf8"</span></div><div class="line"><span class="keyword">alias</span> <span class="title">grep</span>=<span class="string">"grep --color=auto"</span></div><div class="line"><span class="keyword">alias</span> -<span class="title">s</span> <span class="title">py</span>=vi<span class="preprocessor">       # 在命令行直接输入 python 文件，会用 vim 中打开，以下类似</span></div><div class="line"><span class="keyword">alias</span> -<span class="title">s</span> <span class="title">js</span>=vi</div><div class="line"><span class="keyword">alias</span> -<span class="title">s</span> <span class="title">c</span>=vi</div><div class="line"><span class="keyword">alias</span> -<span class="title">s</span> <span class="title">java</span>=vi</div><div class="line"><span class="keyword">alias</span> -<span class="title">s</span> <span class="title">txt</span>=vi</div><div class="line"><span class="keyword">alias</span> -<span class="title">s</span> <span class="title">gz</span>=<span class="comment">'tar -xzvf'</span></div><div class="line"><span class="keyword">alias</span> -<span class="title">s</span> <span class="title">tgz</span>=<span class="comment">'tar -xzvf'</span></div><div class="line"><span class="keyword">alias</span> -<span class="title">s</span> <span class="title">zip</span>=<span class="comment">'unzip'</span></div><div class="line"><span class="keyword">alias</span> -<span class="title">s</span> <span class="title">bz2</span>=<span class="comment">'tar -xjvf'</span></div></pre></td></tr></table></figure>
+
+<p>zsh 的牛粪之处在于不仅可以设置通用别名，还能针对文件类型设置对应的打开程序，比如：</p>
+<p><code>alias -s py=vi</code>，意思就是你在命令行输入 <code>hello.py</code>，<code>zsh</code>会为你自动打开 <code>vi</code> 并读取<code>hello.py</code>； <code>alias -s gz=&#39;tar -xzvf&#39;，表示自动解压后缀为</code>gz `的压缩包。</p>
+<p>总之，只有想不到，木有做不到，吓尿了吧。</p>
+<p>设置完环境变量和别名之后，基本上就可以用了，如果你是个主题控，还可以玩玩 zsh 的主题。在 .zshrc 里找到ZSH_THEME，就可以设置主题了，默认主题是：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">ZSH_THEME</span>=<span class="string">”robbyrussell”</span></div></pre></td></tr></table></figure>
+
+<p>你可以在<a href="https://github.com/robbyrussell/oh-my-zsh/wiki/External-themes" target="_blank" rel="external">这里</a>找到你喜欢的其他主题。</p>
+<h3 id="3-3_插件">3.3 插件</h3>
+<p><code>oh my zsh</code> 项目提供了完善的插件体系，相关的文件在<code>~/.oh-my-zsh/plugins</code>目录下，默认提供了100多种，大家可以根据自己的实际学习和工作环境采用，想了解每个插件的功能，只要打开相关目录下的 <code>zsh</code> 文件看一下就知道了。插件也是在<code>.zshrc</code>里配置，找到<code>plugins</code>关键字，你就可以加载自己的插件了，系统默认加载 <code>git</code> ，你可以在后面追加内容，如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">plugins</span>=<span class="string">(git ruby rails)</span></div></pre></td></tr></table></figure>
+
+<p>就开启了<code>git</code> <code>ruby</code>，<code>rails</code> 三个插件</p>
+<p>更多插件请进入<code>~/.oh-my-zsh/plugins</code>文件夹探索，每个人的需求不一样，每个插件试试总能找到惊喜。</p>
+<p>也可以在官方 WIKI 的 <a href="https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins-Overview" target="_blank" rel="external">Plugins Overview</a> 里面有一些比较神奇的插件，比如敲两下<code>esc</code> 它会 给你自动加上 <code>sudo</code> 的 <code>sudo 插件</code>，让复制显示进度条的cp插件，解压用的 <code>extract 插件</code>（有没有觉得 在命令行下敲一大堆选项才能解压有点奇怪？我也觉得），<code>vi</code>粉的<code>vi-mode</code>等等…</p>
+<p>新 插件的安装方法 以 <code>autojump</code>为例</p>
+<ul>
+<li>1,下载 autojump 的最新版本，比如：</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git clone gi<span class="variable">t:</span>//github.<span class="keyword">com</span>/joelthelion/autojump.git</div></pre></td></tr></table></figure>
+
+
+<ul>
+<li>2,解压缩后进入目录，执行</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./install.<span class="keyword">py</span></div></pre></td></tr></table></figure>
+
+
+<ul>
+<li>3,然后把以下代码加入<code>.zshrc</code>：</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="string">[[ -s ~/.autojump/etc/profile.d/autojump.sh ]]</span> && . ~/.autojump/etc/profile.d/autojump.sh</div></pre></td></tr></table></figure>
+
+
+<ul>
+<li>4,最后在<code>.zshrc</code>中启用插件</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">plugins</span>=<span class="string">(git ruby rails autojump)</span></div></pre></td></tr></table></figure>
+
+
+<h1 id="4_完成">4 完成</h1>
+<p>  至此，一台 VPS 的开荒就完成了，Enjoy it !</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[从零开始设置一台 Linux VPS。]]>
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://sunyang.cc/tags/Linux/"/>
+    
+      <category term="tutorial" scheme="http://sunyang.cc/categories/tutorial/"/>
+    
+  </entry>
+  
+</feed>

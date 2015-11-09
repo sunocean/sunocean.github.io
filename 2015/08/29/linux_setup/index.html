@@ -1,0 +1,409 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>VPS 开荒指南 | YoungSun&#39;s Blog</title>
+  <meta name="author" content="Young Sun">
+  
+  <meta name="description" content="从零开始设置一台 Linux VPS。">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="VPS 开荒指南"/>
+  <meta property="og:site_name" content="YoungSun&#39;s Blog"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.ico" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-69870867-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">YoungSun&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> VPS 开荒指南</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+	
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>从零开始设置一台 Linux VPS。</p>
+			
+		</div> <!-- alert -->
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <h2 id="1_系统环境">1 系统环境</h2>
+<p>从哪个发行版入手这里我们不多做讨论，这里我们选择<code>Ubuntu 14.04 LTS</code>,优点是软件比较新，用的人多，任何问题<code>google</code>一下马上就有答案。本教程客户机部分适用于 <code>Linux</code> 和<code>Mac</code>。</p>
+<h3 id="1-1_创建用户">1.1 创建用户</h3>
+<p>首先通过 VPS 的web 管理工具 root 登录，然后创建一个用户组 <code>admin</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor">#更新下软件包</span></div><div class="line">sudo apt-<span class="keyword">get</span> update</div><div class="line">sudo apt-<span class="keyword">get</span> upgrade</div><div class="line"><span class="preprocessor">#添加用户</span></div><div class="line">addgroup admin</div></pre></td></tr></table></figure>
+
+<a id="more"></a>
+<p>然后，添加一个新用户 <code>username</code></p>
+<figure class="highlight dash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">useradd <span class="operator">-d</span> /home/username <span class="operator">-s</span> /bin/bash -m username</div></pre></td></tr></table></figure>
+
+<p>上面命令中，参数<code>d</code>指定用户的主目录，参数<code>s</code>指定用户的<code>shell</code>，参数<code>m</code>表示如果该目录不存在，则创建该目录。</p>
+<p>接着，设置新用户的密码。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="title">passwd</span> username</div></pre></td></tr></table></figure>
+
+<a id="more"></a>
+<p>将新用户（username）添加到用户组（admin）。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">usermod <span class="operator">-a</span> -G admin username</div></pre></td></tr></table></figure>
+
+<p>接着，为新用户设定sudo权限。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">visudo</div></pre></td></tr></table></figure>
+
+<p><code>visudo</code>命令会打开<code>sudo</code>设置文件<code>/etc/sudoers</code>，找到下面这一行。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root       <span class="keyword">ALL</span>=(<span class="keyword">ALL</span>:<span class="keyword">ALL</span>) <span class="keyword">ALL</span></div></pre></td></tr></table></figure>
+
+<p>在这一行的下面，再添加一行。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">root        <span class="keyword">ALL</span>=(<span class="keyword">ALL</span>:<span class="keyword">ALL</span>) <span class="keyword">ALL</span></div><div class="line">username    <span class="keyword">ALL</span>=(<span class="keyword">ALL</span>) NOPASSWD: <span class="keyword">ALL</span></div></pre></td></tr></table></figure>
+
+<p>上面的NOPASSWD表示，切换sudo的时候，不需要输入密码，我喜欢这样比较省事。如果出于安全考虑，也可以强制要求输入密码。</p>
+<p>然后，先退出root用户的登录，再用新用户的身份登录，检查到这一步为止，是否一切正常。</p>
+<h2 id="2_SSH">2 SSH</h2>
+<p><a href="http://baike.baidu.com/subview/16184/5909252.htm" target="_blank" rel="external">SSH</a>有两种验证方式，出于安全考虑我们选择基于密钥的验证方式。思路就是在本地生成一对 <code>RSA</code>加密的密钥，把公钥上传给服务器用于认证访问的安全性，这样的好处是可以实现多用户不同权限访问。</p>
+<h3 id="2-1_检查客户端（本地）密钥设置">2.1 检查客户端（本地）密钥设置</h3>
+<p>先检查本地<code>.ssh</code>文件夹防止新生成的密钥覆盖原先密钥造成密钥丢失。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ~/.ssh</div></pre></td></tr></table></figure>
+
+<p>如果出现如下提示，则直接跳到第三步</p>
+<blockquote>
+<p>No such file or directory</p>
+</blockquote>
+<h3 id="2-2_备份和移除原来的ssh_key设置">2.2 备份和移除原来的ssh key设置</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">ls</span> </div><div class="line">config  id_rsa  id_rsa.pub  known_hosts//可能有所不同</div><div class="line"><span class="built_in">mkdir</span> key_backup</div><div class="line"><span class="keyword">cp</span> id_rsa* key_backup</div><div class="line">rm id_rsa*</div></pre></td></tr></table></figure>
+
+<h3 id="2-3_生成新的SSH_Key：">2.3 生成新的SSH Key：</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ssh<span class="attribute">-keygen</span> <span class="attribute">-t</span> rsa <span class="attribute">-C</span> <span class="string">"邮件地址@youremail.com"</span></div><div class="line">Generating <span class="keyword">public</span>/<span class="keyword">private</span> rsa key <span class="built_in">pair</span><span class="built_in">.</span></div><div class="line">Enter file <span class="keyword">in</span> which <span class="keyword">to</span> save the key (/Users/your_user_directory<span class="subst">/</span><span class="built_in">.</span>ssh/id_rsa):<span class="comment">//这里回车</span></div></pre></td></tr></table></figure>
+
+<p>然后系统会要求你输入加密串 <a href="https://help.github.com/articles/working-with-ssh-key-passphrases/" target="_blank" rel="external">Passphrase</a> .</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="constant">Enter</span> passphrase (empty <span class="keyword">for</span> no passphrase)<span class="symbol">:&lt;</span>输入加密串&gt;<span class="regexp">//</span>也可以直接回车</div><div class="line"><span class="constant">Enter</span> same passphrase <span class="symbol">again:</span>&lt;再次输入加密串&gt;<span class="regexp">//</span>同上</div></pre></td></tr></table></figure>
+
+<p>看到下图就说明你成功了:</p>
+<p><img src="http://7xim0l.com1.z0.glb.clouddn.com/ssh-key-set.png" alt="你会看到"></p>
+<h3 id="2-4_上传公钥">2.4 上传公钥</h3>
+<p>现在，我们已经在 <code>~/.ssh/</code>目录下创建了两个文件：<code>id_rsa（私钥）</code>，<code>id_rsa.pub（公钥）</code>。公钥放置在我们管理的服务器上，私钥是我们连接服务器的关键，如果有必要，需要在其他地方做一个备份，如果开发机器损坏或丢失，而服务器又无法连接的话，会造成巨大的损失和时间浪费。当然，一般云服务器会提供应急的 web 管理界面，如果出现刚才讲述的情形，我们重新创建一份私钥和公钥，并且替换服务器上的公钥即可。</p>
+<p>现在，我们在服务器上创建一个部署项目的账号，<code>sunyang</code> :</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">sudo</span> useradd sunyang</div><div class="line"><span class="built_in">sudo</span> passwd  sunyang</div><div class="line">Enter  new UNIX password:</div><div class="line">Retype new UNIX password:</div><div class="line">su sunyang</div></pre></td></tr></table></figure>
+
+<p>现在，我们把公钥传递到服务器上,在本机新开一个终端运行以下命令：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="title">cat</span> ~/.ssh/id_rsa.pub | ssh USER<span class="variable">@HOST</span> <span class="string">"mkdir -p ~/.ssh && cat &gt;&gt; ~/.ssh/authorized_keys"</span></div></pre></td></tr></table></figure>
+
+<p><code>authorized_keys</code> 是公钥在服务器上的新名字，这个名字可以改掉。</p>
+<p>为了避免每次登陆服务器都输入密码（也是防止密码被暴力破解），我们配置下服务器的 <a href="http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/sshd.8?query=sshd&amp;sec=8" target="_blank" rel="external">sshd</a>。这个文件通常在 <code>/etc/ssh/sshd_config：</code></p>
+<p>下面这几项请确保和本文一致。(如果前面有#则去掉)</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="title">AuthorizedKeysFile</span>     .ssh/authorized_keys [<span class="number">1</span>]  </div><div class="line">PermitEmptyPasswords                     <span class="built_in">no</span> [<span class="number">2</span>] </div><div class="line">PermitRootLogin                          <span class="built_in">no</span> [<span class="number">3</span>] </div><div class="line">PasswordAuthentication                   <span class="built_in">no</span> [<span class="number">4</span>]</div></pre></td></tr></table></figure>
+
+<ul>
+<li>[1] 这是一种适合多用户的配置，比如，多个开发者登陆服务器，<code>sshd</code> 会校验每个登陆账户下的 <code>.ssh/authorized_keys</code>。</li>
+<li>[2] 禁止空密码访问，这是默认的</li>
+<li>[3] 禁止 <code>root</code> 访问，当我们开通服务器时，这个选项默认是 <code>yes</code>，这样我们可以使用 <code>root</code> 登陆。当设置完 <code>ssh</code> 后，建议第一时间关闭它。</li>
+<li>[4] 不使用密码校验，这是 ssh 会自动读取、开发机器上的私钥校验，如果成功匹配，则自动登陆服务器。</li>
+</ul>
+<p>设置完后，重启 <code>sshd</code> 服务：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">sudo</span> service ssh restart</div></pre></td></tr></table></figure>
+
+<p>不要立刻退出当前的 <code>shell</code>，新开一个终端窗口进行登陆测试。</p>
+<h3 id="2-5_加强型（可选）">2.5 加强型（可选）</h3>
+<p>在配置文件中，将SSH的默认端口22改掉，可以改成从1025到65536之间的任意一个整数（这里假定为9527）。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">Port</span> <span class="number">9527</span></div></pre></td></tr></table></figure>
+
+<p>接着，在配置文件的末尾，指定允许登陆的用户。</p>
+<figure class="highlight dash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="title">AllowUser</span> sunyang username1 username2 <span class="comment">#不同用户用空格隔开</span></div></pre></td></tr></table></figure>
+
+<p>设置完后，重启 <code>sshd</code> 服务：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">sudo</span> service ssh restart</div></pre></td></tr></table></figure>
+
+<p>不要立刻退出当前的 <code>shell</code>，新开一个终端窗口进行登陆测试。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"> ssh sunyang@hostip -p <span class="number">9527</span></div><div class="line"><span class="keyword">...</span></div></pre></td></tr></table></figure>
+
+<p>在客户机（本机）中修改<code>.ssh</code>中的<code>config</code>（如果没有则创建）</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Host sunyang-VM</div><div class="line">HostName <span class="literal">ip</span></div><div class="line">User sunyang</div><div class="line">Port <span class="number">9527</span></div></pre></td></tr></table></figure>
+
+<p>新开一个终端测试</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="title">ssh</span> sunyang-VM</div></pre></td></tr></table></figure>
+
+<h2 id="3_ZSH">3 ZSH</h2>
+<h3 id="3-1_安装_ZSH">3.1 安装 ZSH</h3>
+<p>运行以下命令</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">sudo apt-<span class="built_in">get</span> install zsh</div><div class="line">##安装oh-my-zsh插件</div><div class="line"><span class="keyword">cd</span> ~/.</div><div class="line">##自动安装脚本</div><div class="line">wget --<span class="keyword">no</span>-check-certificate http<span class="variable">s:</span>//github.<span class="keyword">com</span>/robbyrussell/oh-my-zsh/raw/master/tools/install.<span class="keyword">sh</span> -O - | <span class="keyword">sh</span></div></pre></td></tr></table></figure>
+
+<p>耐心等一会 终端就变成彩色的了</p>
+<p><img src="http://7xim0l.com1.z0.glb.clouddn.com/oh-my-zsh.jpeg" alt="zsh"></p>
+<h2 id="设置当前用户使用_zsh">设置当前用户使用 zsh</h2>
+<p> chsh -s /bin/zsh</p>
+<h3 id="3-2_配置_ZSH">3.2 配置 ZSH</h3>
+<p>zsh 的配置主要集中在用户当前目录的<code>.zshrc</code>里，用 <code>vim</code> 或你喜欢的其他编辑器打开<code>.zshrc</code>，在最下面会发现这么一行字：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor"># Customize to your needs…</span></div></pre></td></tr></table></figure>
+
+<p>可以在此处定义自己的环境变量和别名，当然，<code>oh my zsh</code> 在安装时已经自动读取当前的环境变量并进行了设置，你可以继续追加其他环境变量。</p>
+<p>接下来进行别名的设置，我自己的部分配置如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">alias</span> <span class="title">cls</span>=<span class="comment">'clear'</span></div><div class="line"><span class="keyword">alias</span> <span class="title">ll</span>=<span class="comment">'ls -l'</span></div><div class="line"><span class="keyword">alias</span> <span class="title">la</span>=<span class="comment">'ls -a'</span></div><div class="line"><span class="keyword">alias</span> <span class="title">vi</span>=<span class="comment">'vim'</span></div><div class="line"><span class="keyword">alias</span> <span class="title">javac</span>=<span class="string">"javac -J-Dfile.encoding=utf8"</span></div><div class="line"><span class="keyword">alias</span> <span class="title">grep</span>=<span class="string">"grep --color=auto"</span></div><div class="line"><span class="keyword">alias</span> -<span class="title">s</span> <span class="title">py</span>=vi<span class="preprocessor">       # 在命令行直接输入 python 文件，会用 vim 中打开，以下类似</span></div><div class="line"><span class="keyword">alias</span> -<span class="title">s</span> <span class="title">js</span>=vi</div><div class="line"><span class="keyword">alias</span> -<span class="title">s</span> <span class="title">c</span>=vi</div><div class="line"><span class="keyword">alias</span> -<span class="title">s</span> <span class="title">java</span>=vi</div><div class="line"><span class="keyword">alias</span> -<span class="title">s</span> <span class="title">txt</span>=vi</div><div class="line"><span class="keyword">alias</span> -<span class="title">s</span> <span class="title">gz</span>=<span class="comment">'tar -xzvf'</span></div><div class="line"><span class="keyword">alias</span> -<span class="title">s</span> <span class="title">tgz</span>=<span class="comment">'tar -xzvf'</span></div><div class="line"><span class="keyword">alias</span> -<span class="title">s</span> <span class="title">zip</span>=<span class="comment">'unzip'</span></div><div class="line"><span class="keyword">alias</span> -<span class="title">s</span> <span class="title">bz2</span>=<span class="comment">'tar -xjvf'</span></div></pre></td></tr></table></figure>
+
+<p>zsh 的牛粪之处在于不仅可以设置通用别名，还能针对文件类型设置对应的打开程序，比如：</p>
+<p><code>alias -s py=vi</code>，意思就是你在命令行输入 <code>hello.py</code>，<code>zsh</code>会为你自动打开 <code>vi</code> 并读取<code>hello.py</code>； <code>alias -s gz=&#39;tar -xzvf&#39;，表示自动解压后缀为</code>gz `的压缩包。</p>
+<p>总之，只有想不到，木有做不到，吓尿了吧。</p>
+<p>设置完环境变量和别名之后，基本上就可以用了，如果你是个主题控，还可以玩玩 zsh 的主题。在 .zshrc 里找到ZSH_THEME，就可以设置主题了，默认主题是：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">ZSH_THEME</span>=<span class="string">”robbyrussell”</span></div></pre></td></tr></table></figure>
+
+<p>你可以在<a href="https://github.com/robbyrussell/oh-my-zsh/wiki/External-themes" target="_blank" rel="external">这里</a>找到你喜欢的其他主题。</p>
+<h3 id="3-3_插件">3.3 插件</h3>
+<p><code>oh my zsh</code> 项目提供了完善的插件体系，相关的文件在<code>~/.oh-my-zsh/plugins</code>目录下，默认提供了100多种，大家可以根据自己的实际学习和工作环境采用，想了解每个插件的功能，只要打开相关目录下的 <code>zsh</code> 文件看一下就知道了。插件也是在<code>.zshrc</code>里配置，找到<code>plugins</code>关键字，你就可以加载自己的插件了，系统默认加载 <code>git</code> ，你可以在后面追加内容，如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">plugins</span>=<span class="string">(git ruby rails)</span></div></pre></td></tr></table></figure>
+
+<p>就开启了<code>git</code> <code>ruby</code>，<code>rails</code> 三个插件</p>
+<p>更多插件请进入<code>~/.oh-my-zsh/plugins</code>文件夹探索，每个人的需求不一样，每个插件试试总能找到惊喜。</p>
+<p>也可以在官方 WIKI 的 <a href="https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins-Overview" target="_blank" rel="external">Plugins Overview</a> 里面有一些比较神奇的插件，比如敲两下<code>esc</code> 它会 给你自动加上 <code>sudo</code> 的 <code>sudo 插件</code>，让复制显示进度条的cp插件，解压用的 <code>extract 插件</code>（有没有觉得 在命令行下敲一大堆选项才能解压有点奇怪？我也觉得），<code>vi</code>粉的<code>vi-mode</code>等等…</p>
+<p>新 插件的安装方法 以 <code>autojump</code>为例</p>
+<ul>
+<li>1,下载 autojump 的最新版本，比如：</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git clone gi<span class="variable">t:</span>//github.<span class="keyword">com</span>/joelthelion/autojump.git</div></pre></td></tr></table></figure>
+
+
+<ul>
+<li>2,解压缩后进入目录，执行</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./install.<span class="keyword">py</span></div></pre></td></tr></table></figure>
+
+
+<ul>
+<li>3,然后把以下代码加入<code>.zshrc</code>：</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="string">[[ -s ~/.autojump/etc/profile.d/autojump.sh ]]</span> && . ~/.autojump/etc/profile.d/autojump.sh</div></pre></td></tr></table></figure>
+
+
+<ul>
+<li>4,最后在<code>.zshrc</code>中启用插件</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">plugins</span>=<span class="string">(git ruby rails autojump)</span></div></pre></td></tr></table></figure>
+
+
+<h1 id="4_完成">4 完成</h1>
+<p>  至此，一台 VPS 的开荒就完成了，Enjoy it !</p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2015/08/31/access-gfw/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一页</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+          <li class="next disabled"><a>下一页<i class="fa fa-arrow-circle-o-right"></i></a></li>
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div id="disqus_thread">
+     <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  	 </div>
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	8月 29 2015 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/tutorial/">tutorial<span>2</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/Linux/">Linux<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#1_系统环境"><span class="toc-article-text">1 系统环境</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#1-1_创建用户"><span class="toc-article-text">1.1 创建用户</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#2_SSH"><span class="toc-article-text">2 SSH</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-1_检查客户端（本地）密钥设置"><span class="toc-article-text">2.1 检查客户端（本地）密钥设置</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-2_备份和移除原来的ssh_key设置"><span class="toc-article-text">2.2 备份和移除原来的ssh key设置</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-3_生成新的SSH_Key："><span class="toc-article-text">2.3 生成新的SSH Key：</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-4_上传公钥"><span class="toc-article-text">2.4 上传公钥</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#2-5_加强型（可选）"><span class="toc-article-text">2.5 加强型（可选）</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#3_ZSH"><span class="toc-article-text">3 ZSH</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-1_安装_ZSH"><span class="toc-article-text">3.1 安装 ZSH</span></a></li></ol></li><li class="toc-article-item toc-article-level-2"><a class="toc-article-link" href="#设置当前用户使用_zsh"><span class="toc-article-text">设置当前用户使用 zsh</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-2_配置_ZSH"><span class="toc-article-text">3.2 配置 ZSH</span></a></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#3-3_插件"><span class="toc-article-text">3.3 插件</span></a></li></ol></li></ol></li><li class="toc-article-item toc-article-level-1"><a class="toc-article-link" href="#4_完成"><span class="toc-article-text">4 完成</span></a>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2015 Young Sun
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'sunyang';
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>

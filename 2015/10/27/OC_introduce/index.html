@@ -1,0 +1,297 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>OC 入门 | YoungSun&#39;s Blog</title>
+  <meta name="author" content="Young Sun">
+  
+  <meta name="description" content="OC 是 C 语言的超集完全兼容 C 语言的所有语法, 本文主要关注 OC 中新添加的一些属性">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="OC 入门"/>
+  <meta property="og:site_name" content="YoungSun&#39;s Blog"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  
+  
+    <link href="/favicon.ico" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-69870867-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+
+ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+
+</head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">YoungSun&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">		
+			<h1> OC 入门</h1>
+		</div>		
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div class="col-md-9">
+	
+
+	
+		 <div class="alert alert-success description">
+			<i class="fa fa-info-circle"></i> <p>OC 是 C 语言的超集完全兼容 C 语言的所有语法, 本文主要关注 OC 中新添加的一些属性</p>
+			
+		</div> <!-- alert -->
+			
+
+	<!-- content -->
+	<div class="mypage">		
+	    <h3 id="Hello_World">Hello World</h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor">#import <span class="title">&lt;Foundation/Foundation.h&gt;</span></span></div><div class="line"><span class="keyword">int</span> main (<span class="keyword">int</span> argc, contst <span class="keyword">char</span> *argv)</div><div class="line">{</div><div class="line">    <span class="built_in">NSLog</span> (<span class="string">@"Hello World!"</span>);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">} <span class="comment">// main</span></div></pre></td></tr></table></figure>
+
+<a id="more"></a>
+<h4 id="#import">#import</h4>
+<p><code>import</code> 是 OC 中引入的新预编译命令,用来代替 C 语言中 <code>include</code> ,其优点是无论该头文件被引用多少次, 编译的时候只包含一次. (<code>include</code>只是简单复制不做这个检查. )</p>
+<div class="alert alert-success"><i class="fa fa-lightbulb-o"></i>  <p>  在 C 语言中，程序员通常使用基于 #ifdef 命令的方案来避免一个文件包含另一个文件，而后者又包含第一个文件的情况。</p>
+<p>而在 Objective-C 中，程序员使用 #import 来实现这个功能。 </p>
+</div>
+
+
+
+<h4 id="Fundation_框架">Fundation 框架</h4>
+<p>Foundation 框架处理的是用户界面之下的层（layer）中的特性，例如数据结构和通信机制。IOS开发中几乎所有程序都是以 Foundation 框架为基础。如果你想知道 Foundation 框架包含哪些头文件，可以查看其 Header 目录（/System/Library/Frameworks/Foundation.framework/Headers/）。</p>
+<h4 id="NSLog()_和_@“字符串”">NSLog() 和 @“字符串”</h4>
+<p>NSLog 作用类似于 C 语言的<code>printf()</code> ，调用方法也很类似。但我们建议用 <code>NSLog()</code> ，因为它添加了特性，例如时间戳、日期戳和自动附加换行符（<code>\n</code>）等。</p>
+<p><code>@</code> 符号是 Objective-C 在标准 C 语言基础上添加的特性之一。双引号中的字符串前有一个 @ 符号，这表示引用的字符串应该作为 Cocoa 的 NSString 元素来处理。NSString 元素封装了许多特性，Cocoa 在需要字符串时可以随时使用它们。下面是一些 NSString 的功能。</p>
+<ul>
+<li>告知其长度；</li>
+</ul>
+<ul>
+<li>将自身与其他字符串比较；</li>
+</ul>
+<ul>
+<li>将自身转换为整型值或浮点值。</li>
+</ul>
+<h3 id="BOOL_与_boolean">BOOL 与 boolean</h3>
+<p>在 C99 发布前, C 语言中没有严格的 <code>Boolean</code>类型, 程序员通常 用 <code>零</code>和 <code>非零</code>  表示<code>flase</code>和<code>true</code>. 这样虽然增强了 程序实现的灵活性 , 但同时降低了可读性 和 可维护性 . 造成一些难以理解的 Bug . 为了 改善这个问题 OC 引入的新的书记类型 <code>BOOL</code>  来表示开关量.  通过显示赋值来降低<code>Magic Bug</code>的发生. </p>
+<p>其实 OC 并没有完全解决这个问题 ,考虑下面的代码 </p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor">#import &lt;Foundation/Foundation.h&gt;</span></div><div class="line"></div><div class="line"><span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[]) {</div><div class="line"></div><div class="line">	BOOL b =<span class="number">42</span>;</div><div class="line">	<span class="keyword">if</span> (b) {</div><div class="line">		printf(<span class="string">"b is YES\n"</span>);</div><div class="line">	}</div><div class="line">	<span class="keyword">if</span> (b != YES) {</div><div class="line">		printf(<span class="string">"b isn't YES\n"</span>);</div><div class="line">	}</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">}</div><div class="line">输出为 </div><div class="line">b <span class="keyword">is</span> YES</div><div class="line">b isn<span class="string">'t YES</span></div></pre></td></tr></table></figure>
+
+<p>BOOL  类型可以被赋值为非 <code>YES</code> 和 <code>NO</code> 的值. 这是什么情况?  xcode中 按下 <code>⌘ + ⌃ + J</code>  跳入 <code>BOOL</code> 定义  :</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">signed</span> <span class="keyword">char</span> <span class="built_in">BOOL</span>;</div></pre></td></tr></table></figure>
+
+<p>同理  <code>YES</code> 和 <code>NO</code> 的定义如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor">#<span class="keyword">define</span> YES ((BOOL)1)</span></div><div class="line"><span class="preprocessor">#<span class="keyword">define</span> NO  ((BOOL)0)</span></div></pre></td></tr></table></figure>
+
+<p>可以看到 原来<code>BOOL</code> 是 <code>signed char</code> 的马甲. 在编写代码时, 一定要注意检查, 不要给 BOOL 类型赋予 非 <code>YES</code> 和 <code>NO</code> 类型的值.</p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+				
+    	<li class="prev"><a href="/2015/11/01/OC_overview/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>上一页</a></li>
+  		
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2015/08/31/access-gfw/" class="alignright next">下一页<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">留言</h2>
+
+  
+  	 <div id="disqus_thread">
+     <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  	 </div>
+  
+</section>
+
+	
+	</div> <!-- col-md-9/col-md-12 -->
+	
+	
+		<div class="col-md-3"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	10月 27 2015 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/wiki/">wiki<span>2</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/OC/">OC<span>2</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	   <a data-toggle="collapse" data-target="#toc"><i class="fa fa-bars"></i></a>
+	   <div id="toc" class="toc collapse in">
+			<ol class="toc-article"><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#Hello_World"><span class="toc-article-text">Hello World</span></a><ol class="toc-article-child"><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="##import"><span class="toc-article-text">#import</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#Fundation_框架"><span class="toc-article-text">Fundation 框架</span></a></li><li class="toc-article-item toc-article-level-4"><a class="toc-article-link" href="#NSLog()_和_@“字符串”"><span class="toc-article-text">NSLog() 和 @“字符串”</span></a></li></ol></li><li class="toc-article-item toc-article-level-3"><a class="toc-article-link" href="#BOOL_与_boolean"><span class="toc-article-text">BOOL 与 boolean</span></a></li></ol>
+		</div>
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	
+
+</div><!-- row -->
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2015 Young Sun
+  
+      with help from <a href="http://zespia.tw/hexo/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'sunyang';
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+</body>
+   </html>
