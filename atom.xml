@@ -4,7 +4,7 @@
   <subtitle><![CDATA[和无聊得世界死磕！]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://sunyang.cc/"/>
-  <updated>2015-11-09T17:28:34.148Z</updated>
+  <updated>2015-11-18T02:07:21.089Z</updated>
   <id>http://sunyang.cc/</id>
   
   <author>
@@ -13,127 +13,6 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
-  
-  <entry>
-    <title><![CDATA[OC 面向对象概览]]></title>
-    <link href="http://sunyang.cc/2015/11/01/OC_overview/"/>
-    <id>http://sunyang.cc/2015/11/01/OC_overview/</id>
-    <published>2015-11-01T13:30:48.000Z</published>
-    <updated>2015-11-09T16:36:31.000Z</updated>
-    <content type="html"><![CDATA[<p>​      iOS 和 OSX 程序是由一系列对象 (<code>Object</code>) 构成的网络组成的.  对象是类 (<code>Class</code> ) 的实例 .类是对象的模板或者说图纸( Blue print). 类通常由我们自定义或者由系统(Cocoa 和 Cocoa Touch )或者第三方类库提供.  我们在自定义类的时候通常会定义好公共接口(<code>public interface</code>) . 公共接口包含一些用来封装(<code>encapsulate</code>)内部数据的属性( <code>property</code>) 和相应的存取方法(<code>Setter and Getter</code>) 列表以及其他一些消息(<code>Message</code>)响应方法列表. 然后我们会在同一个文件或者对应的<code>.m</code> 文件中实现这些方法. 参考下面这段代码. </p>
-  <a id="more"></a>
-<h2 id="类">类</h2>
-<h3 id="类的声明">类的声明</h3>
-<p><code>Class header (MyClassName.h)</code></p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor">#import <span class="title">"AnyHeaderFile.h"</span></span></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">MyClassName</span> : <span class="title">SuperClassName</span></span></div><div class="line"><span class="comment">// define public properties</span></div><div class="line"><span class="comment">// define public methods</span></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
-
-<h3 id="类的实现">类的实现</h3>
-<p><code>Class implementation (MyClassName.m)</code></p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor">#import <span class="title">"MyClassName.h"</span></span></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">MyClassName</span> ()//类的扩展 (<span class="title">extension</span>)</span></div><div class="line"><span class="comment">// define private properties</span></div><div class="line"><span class="comment">// define private methods</span></div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">MyClassName</span> </span>{</div><div class="line"><span class="comment">// define private instance variables</span></div><div class="line">}</div><div class="line"><span class="comment">// implement methods</span></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
-
-<h4 id="属性_(property)">属性 (<code>property</code>)</h4>
-<p> 定义属性</p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">@property</span> (optional_attribute1, optional_attribute2, ...) type myPropertyName;</div></pre></td></tr></table></figure>
-
-<div class="alert alert-warning"><i class="fa fa-bell"></i>  <p> <code>@property</code> 关键字会让 Xcode 在编译时候自动生成私有的变量实例(private instance variable) ,和相应的存取方法(getter setter) </p>
-<pre><code class="objectivec"><span class="comment">// Automatically defines a private instance variable</span>
-type _myPropertyName;
-<span class="comment">// Automatically creates a getter and setter</span>
-- (type)myPropertyName;
-- (<span class="keyword">void</span>)setMyPropertyName:(type)name;
-</code></pre>
-<p>一般命名规则自动变量名 为属性名加 -前缀, getter 方法名为属性名, setter 方法为 set 前缀加属性名. 当然也可以通过特性开关来修改变量名,我们长把返回布尔量的 getter 方法定义为下面这种形式 </p>
-<pre><code class="objectivec"><span class="keyword">@property</span>  (getter = isEqualTOSomething) type myPeoperrty;
-<span class="comment">//生成的 getter 方法变成了下面这种形式</span>
-- (type) isEqualTOSomething;
-</code></pre>
-</div>
-
-<div class="alert alert-success"><i class="fa fa-lightbulb-o"></i>  <p>tips:</p>
-<p>使用  _myPropertyName 可以直接访问变量(一般用于懒加载)</p>
-<p>使用 self.myPropertyName 通过 getter 和 setter 方法访问变量.</p>
-</div>
-
-<h4 id="方法_(Methods)">方法 (Methods)</h4>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">Defining methods</div><div class="line">- (<span class="class"><span class="keyword">type</span>)<span class="title">doIt</span>;</span></div><div class="line">- (<span class="class"><span class="keyword">type</span>)<span class="title">doItWithA</span>:</span>(<span class="class"><span class="keyword">type</span>)<span class="title">a</span>;</span></div><div class="line">- (<span class="class"><span class="keyword">type</span>)<span class="title">doItWithA</span>:</span>(<span class="class"><span class="keyword">type</span>)<span class="title">a</span> <span class="title">andB</span>:</span>(<span class="class"><span class="keyword">type</span>)<span class="title">b</span>;</span></div><div class="line">Implementing methods</div><div class="line">- (<span class="class"><span class="keyword">type</span>)<span class="title">doIt</span> {</span></div><div class="line">    <span class="comment">// do something</span></div><div class="line">    <span class="keyword">return</span> ReturnValue;</div><div class="line">}</div><div class="line"></div><div class="line">- (<span class="class"><span class="keyword">type</span>)<span class="title">doItWithA</span>:</span>(<span class="class"><span class="keyword">type</span>)<span class="title">a</span> {</span></div><div class="line">    <span class="comment">// do something with a</span></div><div class="line">    <span class="keyword">return</span> ReturnValue;</div><div class="line">}</div><div class="line"></div><div class="line">- (<span class="class"><span class="keyword">type</span>)<span class="title">doItWithA</span>:</span>(<span class="class"><span class="keyword">type</span>)<span class="title">a</span> <span class="title">andB</span>:</span>(<span class="class"><span class="keyword">type</span>)<span class="title">b</span> {</span></div><div class="line">    <span class="comment">// do something with a and b</span></div><div class="line">    <span class="keyword">return</span> ReturnValue;</div><div class="line">}</div></pre></td></tr></table></figure>
-
-<h4 id="常量(Constants)">常量(Constants)</h4>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">File specific constants</div><div class="line">  <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">double</span> name = <span class="keyword">value</span>;</div><div class="line">  <span class="keyword">static</span> NSString * <span class="keyword">const</span> name = <span class="keyword">value</span>;</div><div class="line">External constants</div><div class="line">  <span class="comment">// .h</span></div><div class="line">  <span class="keyword">extern</span> <span class="keyword">const</span> <span class="keyword">double</span> name;</div><div class="line">  <span class="comment">// .m</span></div><div class="line">  <span class="keyword">const</span> <span class="keyword">double</span> name = <span class="keyword">value</span>;</div><div class="line"></div><div class="line">  <span class="comment">// .h</span></div><div class="line">  <span class="keyword">extern</span> NSString * <span class="keyword">const</span> name;</div><div class="line">  <span class="comment">// .m</span></div><div class="line">  NSString * <span class="keyword">const</span> name = <span class="keyword">value</span>;</div></pre></td></tr></table></figure>
-
-<h3 id="对象">对象</h3>
-<h4 id="创建对象">创建对象</h4>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">Creating objects</div><div class="line">ClassName *<span class="variable">myObject =</span> [[ClassName alloc] init];</div><div class="line">Using properties</div><div class="line">// setting value</div><div class="line">[myObject setMyPropertyName:a]; // <span class="constant">or</span></div><div class="line">myObject.<span class="variable">myPropertyName =</span> a;</div><div class="line"></div><div class="line">// getting value</div><div class="line"><span class="variable">a =</span> [myObject myPropertyName]; // <span class="constant">or</span></div><div class="line"><span class="variable">a =</span> myObject.myPropertyName;</div><div class="line">Calling methods</div><div class="line">[myObject doIt];</div><div class="line">[myObject doItWithA:a];</div><div class="line">[myObject doItWithA:a andB:b];</div></pre></td></tr></table></figure>
-
-<h3 id="完整示例">完整示例</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">Custom initializer</div><div class="line">- (<span class="keyword">id</span>)initWithParam:(type)param {</div><div class="line">    <span class="keyword">if</span> ((<span class="keyword">self</span> = [<span class="keyword">super</span> init])) {</div><div class="line">        _myPropertyName = param;</div><div class="line">    }</div><div class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</div><div class="line">}</div><div class="line"><span class="built_in">NSString</span></div><div class="line"><span class="built_in">NSString</span> *personOne = <span class="string">@"Ray"</span>;</div><div class="line"><span class="built_in">NSString</span> *personTwo = <span class="string">@"Shawn"</span>;</div><div class="line"><span class="built_in">NSString</span> *combinedString = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%@: Hello, %@!"</span>, personOne, personTwo];</div><div class="line"><span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, combinedString);</div><div class="line"><span class="built_in">NSString</span> *tipString = <span class="string">@"24.99"</span>;</div><div class="line"><span class="keyword">float</span> tipFloat = [tipString floatValue];</div><div class="line"><span class="built_in">NSArray</span></div><div class="line"><span class="built_in">NSMutableArray</span> *array = [@[person1, person2] mutableCopy];</div><div class="line">[array addObject:<span class="string">@"Waldo"</span>];</div><div class="line"><span class="keyword">for</span> (<span class="built_in">NSString</span> *person <span class="keyword">in</span> array) {</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"Person: %@"</span>, person);</div><div class="line">}</div><div class="line"><span class="built_in">NSString</span> *waldo = array[<span class="number">2</span>];</div></pre></td></tr></table></figure>
-
-]]></content>
-    <summary type="html">
-    <![CDATA[OC 是一种用来写 iOS 或者 OSX 程序的初级语言,它是 C 语言的超集, 继承了 C 语言所有的语法比如基本类型和流控等等. OC 在 C 语言基础上增加定义类和方法的语法, 并为对象许多运行时特性(比如动态类型, 动态绑定, 懒加载等等) 提供了语言级的支持.]]>
-    
-    </summary>
-    
-      <category term="OC" scheme="http://sunyang.cc/tags/OC/"/>
-    
-      <category term="wiki" scheme="http://sunyang.cc/categories/wiki/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[OC 入门]]></title>
-    <link href="http://sunyang.cc/2015/10/27/OC_introduce/"/>
-    <id>http://sunyang.cc/2015/10/27/OC_introduce/</id>
-    <published>2015-10-27T04:51:15.000Z</published>
-    <updated>2015-11-04T07:43:34.000Z</updated>
-    <content type="html"><![CDATA[<h3 id="Hello_World">Hello World</h3>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor">#import <span class="title">&lt;Foundation/Foundation.h&gt;</span></span></div><div class="line"><span class="keyword">int</span> main (<span class="keyword">int</span> argc, contst <span class="keyword">char</span> *argv)</div><div class="line">{</div><div class="line">    <span class="built_in">NSLog</span> (<span class="string">@"Hello World!"</span>);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">} <span class="comment">// main</span></div></pre></td></tr></table></figure>
-
-<a id="more"></a>
-<h4 id="#import">#import</h4>
-<p><code>import</code> 是 OC 中引入的新预编译命令,用来代替 C 语言中 <code>include</code> ,其优点是无论该头文件被引用多少次, 编译的时候只包含一次. (<code>include</code>只是简单复制不做这个检查. )</p>
-<div class="alert alert-success"><i class="fa fa-lightbulb-o"></i>  <p>  在 C 语言中，程序员通常使用基于 #ifdef 命令的方案来避免一个文件包含另一个文件，而后者又包含第一个文件的情况。</p>
-<p>而在 Objective-C 中，程序员使用 #import 来实现这个功能。 </p>
-</div>
-
-
-
-<h4 id="Fundation_框架">Fundation 框架</h4>
-<p>Foundation 框架处理的是用户界面之下的层（layer）中的特性，例如数据结构和通信机制。IOS开发中几乎所有程序都是以 Foundation 框架为基础。如果你想知道 Foundation 框架包含哪些头文件，可以查看其 Header 目录（/System/Library/Frameworks/Foundation.framework/Headers/）。</p>
-<h4 id="NSLog()_和_@“字符串”">NSLog() 和 @“字符串”</h4>
-<p>NSLog 作用类似于 C 语言的<code>printf()</code> ，调用方法也很类似。但我们建议用 <code>NSLog()</code> ，因为它添加了特性，例如时间戳、日期戳和自动附加换行符（<code>\n</code>）等。</p>
-<p><code>@</code> 符号是 Objective-C 在标准 C 语言基础上添加的特性之一。双引号中的字符串前有一个 @ 符号，这表示引用的字符串应该作为 Cocoa 的 NSString 元素来处理。NSString 元素封装了许多特性，Cocoa 在需要字符串时可以随时使用它们。下面是一些 NSString 的功能。</p>
-<ul>
-<li>告知其长度；</li>
-</ul>
-<ul>
-<li>将自身与其他字符串比较；</li>
-</ul>
-<ul>
-<li>将自身转换为整型值或浮点值。</li>
-</ul>
-<h3 id="BOOL_与_boolean">BOOL 与 boolean</h3>
-<p>在 C99 发布前, C 语言中没有严格的 <code>Boolean</code>类型, 程序员通常 用 <code>零</code>和 <code>非零</code>  表示<code>flase</code>和<code>true</code>. 这样虽然增强了 程序实现的灵活性 , 但同时降低了可读性 和 可维护性 . 造成一些难以理解的 Bug . 为了 改善这个问题 OC 引入的新的书记类型 <code>BOOL</code>  来表示开关量.  通过显示赋值来降低<code>Magic Bug</code>的发生. </p>
-<p>其实 OC 并没有完全解决这个问题 ,考虑下面的代码 </p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor">#import &lt;Foundation/Foundation.h&gt;</span></div><div class="line"></div><div class="line"><span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[]) {</div><div class="line"></div><div class="line">	BOOL b =<span class="number">42</span>;</div><div class="line">	<span class="keyword">if</span> (b) {</div><div class="line">		printf(<span class="string">"b is YES\n"</span>);</div><div class="line">	}</div><div class="line">	<span class="keyword">if</span> (b != YES) {</div><div class="line">		printf(<span class="string">"b isn't YES\n"</span>);</div><div class="line">	}</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">}</div><div class="line">输出为 </div><div class="line">b <span class="keyword">is</span> YES</div><div class="line">b isn<span class="string">'t YES</span></div></pre></td></tr></table></figure>
-
-<p>BOOL  类型可以被赋值为非 <code>YES</code> 和 <code>NO</code> 的值. 这是什么情况?  xcode中 按下 <code>⌘ + ⌃ + J</code>  跳入 <code>BOOL</code> 定义  :</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">signed</span> <span class="keyword">char</span> <span class="built_in">BOOL</span>;</div></pre></td></tr></table></figure>
-
-<p>同理  <code>YES</code> 和 <code>NO</code> 的定义如下</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="preprocessor">#<span class="keyword">define</span> YES ((BOOL)1)</span></div><div class="line"><span class="preprocessor">#<span class="keyword">define</span> NO  ((BOOL)0)</span></div></pre></td></tr></table></figure>
-
-<p>可以看到 原来<code>BOOL</code> 是 <code>signed char</code> 的马甲. 在编写代码时, 一定要注意检查, 不要给 BOOL 类型赋予 非 <code>YES</code> 和 <code>NO</code> 类型的值.</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[OC 是 C 语言的超集完全兼容 C 语言的所有语法, 本文主要关注 OC 中新添加的一些属性]]>
-    
-    </summary>
-    
-      <category term="OC" scheme="http://sunyang.cc/tags/OC/"/>
-    
-      <category term="wiki" scheme="http://sunyang.cc/categories/wiki/"/>
-    
-  </entry>
   
   <entry>
     <title><![CDATA[自制梯子，VPS 搭建 ShadwSocks 服务全攻略]]></title>

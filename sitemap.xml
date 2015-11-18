@@ -2,18 +2,8 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://sunyang.cc/2015/11/01/OC_overview/</loc>
-    <lastmod>2015-11-09T16:36:31.000Z</lastmod>
-  </url>
-  
-  <url>
     <loc>http://sunyang.cc/2015/08/31/access-gfw/</loc>
     <lastmod>2015-11-04T14:42:00.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://sunyang.cc/2015/10/27/OC_introduce/</loc>
-    <lastmod>2015-11-04T07:43:34.000Z</lastmod>
   </url>
   
   <url>
@@ -22,7 +12,7 @@
   </url>
   
   <url>
-    <loc>http://sunyang.cc/about/index.html</loc>
+    <loc>http://sunyang.cc/categories/index.html</loc>
     <lastmod>2015-08-29T07:57:54.000Z</lastmod>
   </url>
   
@@ -32,7 +22,7 @@
   </url>
   
   <url>
-    <loc>http://sunyang.cc/categories/index.html</loc>
+    <loc>http://sunyang.cc/about/index.html</loc>
     <lastmod>2015-08-29T07:57:54.000Z</lastmod>
   </url>
   
